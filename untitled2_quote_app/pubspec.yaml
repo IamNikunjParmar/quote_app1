@@ -88,5 +88,18 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
+
+
+  fonts:
+    - family: play fair
+      fonts:
+        - asset: assets/fonts/Playfair.ttf
+    - family: play ball
+      fonts:
+        - asset: assets/fonts/Playball.ttf
+    - family: borel
+      fonts:
+        - asset: assets/fonts/Borel.ttf
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

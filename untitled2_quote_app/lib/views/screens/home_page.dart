@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:untitled2_quote_app/models/quote_model.dart';
 import 'package:untitled2_quote_app/utils/color_utils.dart';
 import 'package:untitled2_quote_app/utils/quote_utils.dart';
 
@@ -12,7 +13,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  String? selectedCategory;
+  String  selectedCategory = "All";
+
+  List<Quote> randomQuoteList = allQuotes;
+
+  int n = 0;
 
   bool isGrid = false ;
   @override
@@ -114,8 +119,17 @@ class _HomePageState extends State<HomePage> {
 
                 ),)
                   : selectedCategory == "All"
-                  ? ListView.builder(itemBuilder: (context,index)=>Row())
-                  : ListView.builder(itemBuilder: (context,index)=>Row())
+                  ? ListView.builder(
+                  itemBuilder: (context,index)=> selectedCategory == allQuotes[index].category
+                      ? Card()
+                      : Container(),
+              )
+                  : ListView.builder(
+                      itemCount: allQuotes.length,
+                      itemBuilder: (context,index)=> selectedCategory == allQuotes[index].category
+                   ? Card()
+                   : Container(),
+              )
               // ListView.builder(
               //   itemCount: allQuotes.length,
               //     itemBuilder:(context,index)=>(allQuotes[index].category == selectedCategory)
