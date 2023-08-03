@@ -64,7 +64,8 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child:isGrid
                   ? SingleChildScrollView(
-                child: StaggeredGrid.count(crossAxisCount: 2,
+                child: StaggeredGrid.count(
+                  crossAxisCount: 2,
                 children: List.generate(
                     allQuotes.length,
                         (index) => selectedCategory == "All"
@@ -120,16 +121,34 @@ class _HomePageState extends State<HomePage> {
                 ),)
                   : selectedCategory == "All"
                   ? ListView.builder(
-                  itemBuilder: (context,index)=> selectedCategory == allQuotes[index].category
-                      ? Card()
-                      : Container(),
+                itemCount: randomQuoteList.length,
+                  itemBuilder: (context,index)=> Card(
+                    color: Colors.primaries[index % 18],
+                    child: ListTile(
+                      title: Text(
+                        randomQuoteList[index].quote,
+                        style: const TextStyle(color: Colors.white,fontSize: 16),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            "- ${randomQuoteList[index].author}",
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+
+                  // : ListView.builder(
+                  //     itemCount: allQuotes.length,
+                  //     itemBuilder: (context,index)=> selectedCategory == allQuotes[index].category
+                  //  ? Card()
+                  //  : Container(),
               )
-                  : ListView.builder(
-                      itemCount: allQuotes.length,
-                      itemBuilder: (context,index)=> selectedCategory == allQuotes[index].category
-                   ? Card()
-                   : Container(),
-              )
+                  : Container(),
               // ListView.builder(
               //   itemCount: allQuotes.length,
               //     itemBuilder:(context,index)=>(allQuotes[index].category == selectedCategory)

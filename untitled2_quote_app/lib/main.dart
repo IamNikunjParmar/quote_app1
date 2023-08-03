@@ -18,8 +18,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
+
       routes: {
-        "home":(context) => HomePage(),
+         "home":(context) => HomePage(),
         "details-page": (context) => QuoteDetails(),
       },
     );
