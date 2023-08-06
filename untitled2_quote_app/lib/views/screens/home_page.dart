@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:untitled2_quote_app/models/quote_model.dart';
@@ -20,6 +21,8 @@ class _HomePageState extends State<HomePage> {
   int n = 0;
 
   bool isGrid = false ;
+
+  get themeColor => null;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +32,10 @@ class _HomePageState extends State<HomePage> {
         foregroundColor: Colors.white,
         actions: [
           IconButton(onPressed: () {
+            setState(() {
+              isGrid = !isGrid;
 
+            });
           },
               icon: Icon(isGrid ?Icons.list :Icons.grid_view_rounded))
         ],
@@ -51,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                   child: Container(
                     margin: EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: selectedCategory == e ? MyColor.themeColor : Colors.grey,
+                      color: selectedCategory == e ? MyColor.themeColor: Colors.grey,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     padding: EdgeInsets.all(16),
@@ -61,115 +67,153 @@ class _HomePageState extends State<HomePage> {
                 ).toList(),
               ),
             ),
-            Expanded(
-              child:isGrid
-                  ? SingleChildScrollView(
-                child: StaggeredGrid.count(
-                  crossAxisCount: 2,
-                children: List.generate(
-                    allQuotes.length,
-                        (index) => selectedCategory == "All"
-                ? StaggeredGridTile.count(
-                          crossAxisCellCount: 1,
-                          mainAxisCellCount:  index % 2 == 0 ? 1 : 1.5,
-                          child: Card(
-                            color: Colors.primaries[index % 18].shade700,
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(allQuotes[index].quote,
-                                  maxLines: 4,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
-                            : Visibility(
-                          visible: selectedCategory == allQuotes[index].category,
-                          child: StaggeredGridTile.count(crossAxisCellCount: 1,
-                              mainAxisCellCount: index % 2 == 0 ? 1 : 1.5 ,
+            isGrid
+                ? Expanded(
+              child: SingleChildScrollView(
+                  child: StaggeredGrid.count(
+                      crossAxisCount: 2,
+                      children: List.generate(
+                          allQuotes.length,
+                              (index) => selectedCategory == "All"
+                              ? StaggeredGridTile.count(
+                            crossAxisCellCount: 1,
+                            mainAxisCellCount:
+                            index % 2 == 0 ? 1 : 1.5,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context)
+                                    .pushNamed(MyRoutes.QuoteDetails,
+                                    arguments: allQuotes[index])
+                                    .then(
+                                      (value) => setState(() {
+                                   selectedCategory = "All";
+                                  }),
+                                );
+                              },
                               child: Card(
-                                color: Colors.primaries[index % 18].shade700,
+                                color: Colors
+                                    .primaries[index % 18].shade800,
                                 child: Padding(
-                                  padding: EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.all(8),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.end,
                                     children: [
-                                      Text(allQuotes[index].quote,
+                                      Text(
+                                        allQuotes[index].quote,
                                         maxLines: 4,
-                                        overflow: TextOverflow.ellipsis,
+                                        overflow:
+                                        TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 16,
                                           color: Colors.white,
                                         ),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        " - ${allQuotes[index].author}",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.white),
                                       )
                                     ],
                                   ),
                                 ),
-                              ), ),
-                        ),
+                              ),
+                            ),
+                          )
+                              : Visibility(
+                              visible: selectedCategory ==
+                                  allQuotes[index].category,
+                              child: StaggeredGridTile.count(
+                                crossAxisCellCount: 1,
+                                mainAxisCellCount:
+                                index % 2 == 0 ? 1 : 1.5,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed(
+                                        MyRoutes.QuoteDetails,
+                                        arguments: allQuotes[index]);
+                                  },
+                                  child: Card(
+                                    color: Colors.blue,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            allQuotes[index].quote,
+                                            maxLines: 4,
+                                            overflow:
+                                            TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Text(
+                                            " - ${allQuotes[index].author}",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ))))),
+            )
+                : selectedCategory == "All"
+                ? SizedBox(
+              height: MediaQuery.of(context).size.height - 200,
+              child: ListView.builder(
+                itemCount: allQuotes.length,
+                itemBuilder: (context, index) => Card(
+                  child: ListTile(
+                    title: Text(
+                      allQuotes[index].quote,
+                      style: TextStyle(fontSize: 16),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    subtitle: Text(allQuotes[index].author),
+                  ),
                 ),
-
-                ),)
-                  : selectedCategory == "All"
-                  ? ListView.builder(
-                itemCount: randomQuoteList.length,
-                  itemBuilder: (context,index)=> Card(
+              ),
+            )
+                : SizedBox(
+              height: MediaQuery.of(context).size.height - 200,
+              child: ListView.builder(
+                itemCount: allQuotes.length,
+                itemBuilder: (context, index) =>
+                allQuotes[index].category == selectedCategory
+                    ? GestureDetector(
+                  onTap: (){
+                    Navigator.of(context).pushNamed(MyRoutes.QuoteDetails,arguments: allQuotes[index]);
+                  },
+                  child: Card(
                     color: Colors.primaries[index % 18],
                     child: ListTile(
                       title: Text(
-                        randomQuoteList[index].quote,
-                        style: const TextStyle(color: Colors.white,fontSize: 16),
+                        allQuotes[index].quote,
+                        style: TextStyle(fontSize: 16),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      subtitle: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            "- ${randomQuoteList[index].author}",
-                          )
-                        ],
-                      ),
+                      subtitle: Text(allQuotes[index].author),
                     ),
-                  )
-
-                  // : ListView.builder(
-                  //     itemCount: allQuotes.length,
-                  //     itemBuilder: (context,index)=> selectedCategory == allQuotes[index].category
-                  //  ? Card()
-                  //  : Container(),
-              )
-                  : Container(),
-              // ListView.builder(
-              //   itemCount: allQuotes.length,
-              //     itemBuilder:(context,index)=>(allQuotes[index].category == selectedCategory)
-              //         ? ListTile(
-              //       leading: CircleAvatar() ,
-              //       title: Text(allQuotes[index].quote),
-              //      // isThreeLine: true,
-              //       trailing: IconButton(
-              //         onPressed: () {
-              //
-              //         },
-              //         icon: Icon(Icons.arrow_forward_ios_outlined),
-              //       ),
-              //
-              //     )
-              //         : Container(),
-              // ),
+                  ),
+                )
+                    : Container(),
+              ),
             ),
-          ],
-        ),
+          ]),
       ),
+
     );
   }
 }

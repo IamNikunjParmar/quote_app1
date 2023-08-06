@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:untitled2_quote_app/utils/quote_utils.dart';
 import 'package:untitled2_quote_app/views/screens/home_page.dart';
 import 'package:untitled2_quote_app/views/screens/quote_details.dart';
 
@@ -17,11 +18,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
+        
       ),
 
       routes: {
-         "home":(context) => HomePage(),
-        "details-page": (context) => QuoteDetails(),
+        MyRoutes.home:(context) => const HomePage(),
+        MyRoutes.QuoteDetails:(context)=>  QuoteDetails(),
       },
     );
   }
